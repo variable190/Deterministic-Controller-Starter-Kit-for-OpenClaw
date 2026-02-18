@@ -78,6 +78,30 @@ Portfolio logs:
 - `PROJECT_PROMOTED from="<A>" to="<B>"`
 - `HB_PORTFOLIO_COMPLETE message="all projects complete"`
 
+Runtime/automation logs:
+- `HB_AUTOMATION_STOPPED poll_disabled=<true|false> pollJobId="<id|MISSING>" heartbeat_disabled=<true|false> reason="<reason>"`
+
+## Terminal Policy (stop automation when no executable work remains)
+Portfolio is terminal when **no executable work remains**:
+- No sprint step is `TODO` or `DOING` (i.e., all steps are `DONE` or `BLOCKED`), AND
+- Queue has no `BACKLOG` rows (i.e., everything is `COMPLETE` or `BLOCKED`).
+
+Terminal behavior (mandatory in the same control cycle that emits `HB_PORTFOLIO_COMPLETE`):
+
+A) Disable poll loop cron job (fast continuation loop)
+1) `cron.list(includeDisabled=true)`
+2) Find the single job with `name="subagent-poll-every-3m"`.
+3) If found and `enabled=true`, run `cron.update(jobId=<id>, patch={enabled:false})`.
+
+B) Disable heartbeat loop (periodic visibility loop)
+1) If current effective heartbeat cadence is already disabled (config `agents.defaults.heartbeat.every == ""`), do nothing.
+2) Else run:
+   `gateway(action="config.patch", raw={"agents":{"defaults":{"heartbeat":{"every":""}}}}, note="Disable heartbeat schedule (terminal portfolio)")`
+   - This triggers an automatic gateway restart.
+
+C) Emit exactly one terminal automation log line after attempting A and B:
+`HB_AUTOMATION_STOPPED poll_disabled=<true|false> pollJobId="<id|MISSING>" heartbeat_disabled=<true|false> reason="portfolio_terminal"`
+
 ## Sprint Plan Import Protocol (external plan files)
 - Purpose: keep `ACTIVITIES.md` small even with many queued projects.
 - Each queue row MUST include a `Plan Path`.
