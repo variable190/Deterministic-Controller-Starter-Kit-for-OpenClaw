@@ -18,8 +18,34 @@ If you want to spawn subagents with specific models, add them to `agents.default
 }
 ```
 
-## 2) Default model split (example)
-Main/orchestrator on a stronger “agentic” model, coding subagents on code-optimized model:
+## 2) Heartbeat config (IMPORTANT)
+The controller relies on an explicit heartbeat prompt that starts with:
+- `TRIGGER=HEARTBEAT_TICK`
+
+If you only set `agents.defaults.heartbeat.every` but do not set the prompt, heartbeats will not execute the controller contract.
+
+Minimal snippet:
+
+```json
+{
+  "agents": {
+    "defaults": {
+      "heartbeat": {
+        "every": "",
+        "target": "last",
+        "prompt": "TRIGGER=HEARTBEAT_TICK\nExecute HEARTBEAT.md exactly. Do not use context from prior chats."
+      }
+    }
+  }
+}
+```
+
+Notes:
+- Keep `every: ""` (disabled) until you deliberately arm the system.
+- `target: "last"` makes the heartbeat run in the last active session.
+
+## 3) Default model split (example)
+Main/orchestrator on an agentic model; coding subagents on a code-optimized model:
 
 ```json
 {
@@ -42,7 +68,7 @@ Main/orchestrator on a stronger “agentic” model, coding subagents on code-op
 }
 ```
 
-## 3) Cross-context message sends (optional)
+## 4) Cross-context message sends (optional)
 If your control-plane destination is Telegram but you’re chatting somewhere else, you may need:
 
 ```json
@@ -59,7 +85,7 @@ If your control-plane destination is Telegram but you’re chatting somewhere el
 }
 ```
 
-## 4) Telegram group allowlist (optional)
+## 5) Telegram group allowlist (optional)
 If you run with `channels.telegram.groupPolicy="allowlist"`, you must explicitly allow the group.
 
 ```json

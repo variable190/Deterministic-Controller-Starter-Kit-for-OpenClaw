@@ -65,8 +65,11 @@ Leave it **disabled** until you explicitly start.
 ### Step 7 — Arm / Disarm protocol
 Arm (start running):
 1) Enable the poll cron job.
-2) Set heartbeat cadence (`agents.defaults.heartbeat.every`) to something like `30m`.
-3) Set the next project row to `ACTIVE` and import its plan (or let the controller promote/import when a prior sprint completes).
+2) Ensure your heartbeat prompt is configured (this is required):
+   - `agents.defaults.heartbeat.prompt` must start with `TRIGGER=HEARTBEAT_TICK` and instruct: `Execute HEARTBEAT.md exactly`.
+   - See: `docs/openclaw_config_snippets.md` → "Heartbeat config (IMPORTANT)".
+3) Set heartbeat cadence (`agents.defaults.heartbeat.every`) to something like `30m`.
+4) Set the next project row to `ACTIVE` and import its plan (or let the controller promote/import when a prior sprint completes).
 
 Disarm (stop running):
 - Disable poll cron.
