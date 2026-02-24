@@ -1,0 +1,5 @@
+# Exclude local build artifacts / archives
+*.tgz
+*.zip
+backups/
+.DS_Store
