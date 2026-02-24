@@ -101,47 +101,6 @@ You should see `anthropic/claude-opus-4-6` as your default with auth confirmed.
 
 ---
 
-## Quick Start
-
-### 1. Copy templates to your workspace
-
-```bash
-WORKSPACE=$(openclaw status --json | jq -r '.workspace')
-cp templates/CONTROLLER.md "$WORKSPACE/CONTROLLER.md"
-cp templates/ACTIVITIES.md "$WORKSPACE/ACTIVITIES.md"
-cp templates/SPRINT_TEMPLATE.md "$WORKSPACE/SPRINT_TEMPLATE.md"
-cp templates/MEMORY.md "$WORKSPACE/MEMORY.md"
-```
-
-### 2. Create your first sprint plan
-
-Copy `SPRINT_TEMPLATE.md` to `projects/<your-project>/sprint-plan.md` and fill it in. Every step needs:
-- A concrete action
-- A completion condition
-- An evidence path (where to find proof it's done)
-
-### 3. Add it to the queue
-
-Edit `ACTIVITIES.md` and add a row to the Project Queue table:
-
-```markdown
-| 1 | My First Project | BACKLOG | `projects/my-project/sprint-plan.md` | - |
-```
-
-### 4. Set up the poll cron (optional — for autonomous execution)
-
-See `docs/poll-cron-setup.md` for full instructions. This creates a cron that sends `POLL_TICK` to your agent every N minutes, driving the control loop.
-
-### 5. Arm and run
-
-Tell your agent: *"Read CONTROLLER.md and arm yourself"*
-
-Or manually:
-1. Enable the poll cron
-2. The agent reads ACTIVITIES.md, promotes the first BACKLOG project to ACTIVE, imports the sprint plan, and dispatches Step 1
-
----
-
 ## Token Efficiency — The Most Important Thing
 
 Read `docs/token-efficiency.md` for the full guide. Here's the summary:
@@ -220,6 +179,47 @@ workspace/
         ├── README.md        # Project context
         └── sprint-plan.md   # Current sprint
 ```
+
+## Quick Start for Running Sprints
+
+### 1. Copy templates to your workspace
+
+```bash
+WORKSPACE=$(openclaw status --json | jq -r '.workspace')
+cp templates/CONTROLLER.md "$WORKSPACE/CONTROLLER.md"
+cp templates/ACTIVITIES.md "$WORKSPACE/ACTIVITIES.md"
+cp templates/SPRINT_TEMPLATE.md "$WORKSPACE/SPRINT_TEMPLATE.md"
+cp templates/MEMORY.md "$WORKSPACE/MEMORY.md"
+```
+
+### 2. Create your first sprint plan
+
+Copy `SPRINT_TEMPLATE.md` to `projects/<your-project>/sprint-plan.md` and fill it in. Every step needs:
+- A concrete action
+- A completion condition
+- An evidence path (where to find proof it's done)
+
+### 3. Add it to the queue
+
+Edit `ACTIVITIES.md` and add a row to the Project Queue table:
+
+```markdown
+| 1 | My First Project | BACKLOG | `projects/my-project/sprint-plan.md` | - |
+```
+
+### 4. Set up the poll cron (optional — for autonomous execution)
+
+See `docs/poll-cron-setup.md` for full instructions. This creates a cron that sends `POLL_TICK` to your agent every N minutes, driving the control loop.
+
+### 5. Arm and run
+
+Tell your agent: *"Read CONTROLLER.md and arm yourself"*
+
+Or manually:
+1. Enable the poll cron
+2. The agent reads ACTIVITIES.md, promotes the first BACKLOG project to ACTIVE, imports the sprint plan, and dispatches Step 1
+
+---
 
 ---
 
