@@ -182,6 +182,8 @@ workspace/
 
 ## Quick Start for Running Sprints
 
+**Ask your openclaw agent to carry out these steps. Be as detailed as possible in what the sprint ahould achieve.**
+
 ### 1. Copy templates to your workspace
 
 ```bash
